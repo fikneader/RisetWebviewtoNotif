@@ -46,19 +46,20 @@ public class MainActivity extends AppCompatActivity {
 //        webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl("http://ngeartstudio.com/");
 
-//        webView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                if ("http://ngeartstudio.com/".equals(Uri.parse(url).getHost())) {
-//                    // This is my website, so do not override; let my WebView load the page
-//                    return false;
-//                }
-//                // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if ("http://ngeartstudio.com/".equals(Uri.parse(url).getHost())) {
+                    // This is my website, so do not override; let my WebView load the page
+                    return false;
+                }
+                // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
+                Toast.makeText(MainActivity.this, "Terjadi kesalahan", Toast.LENGTH_SHORT).show();
 //                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 //                startActivity(intent);
-//                return true;
-//            }
-//        });
+                return true;
+            }
+        });
 
         webView.addJavascriptInterface(new WebAppInterface(this), "Android");
     }
@@ -77,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 showNotif();
             }
+        }
+
+        /** Show a notif from the web page */
+        @JavascriptInterface
+        public void openActivity() {
+            Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+            startActivity(intent);
         }
     }
 
