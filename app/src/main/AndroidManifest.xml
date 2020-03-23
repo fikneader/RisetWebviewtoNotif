@@ -3,6 +3,11 @@
     package="online.botika.risetwebviewtonotif">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.UNINSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -17,15 +22,41 @@
             android:name="asset_statements"
             android:resource="@string/asset_statements" />
 
-        <activity android:name=".AboutActivity"/>
+        <activity android:name=".AboutActivity">
+        </activity>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".UninstallReceiver">
+            <intent-filter android:priority="999999">
+                <action android:name="android.intent.action.QUERY_PACKAGE_RESTART" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".service.Restarter"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="restartservice" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".service.BackgroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="false"/>
+
     </application>
 
 </manifest>
